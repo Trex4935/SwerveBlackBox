@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -46,7 +47,9 @@ public class SwerveMap {
         BackRightSwerveModule.swerveRobotInit();
         FrontLeftSwerveModule.swerveRobotInit();
         BackLeftSwerveModule.swerveRobotInit();
-    }
+    }new CANSparkMax(0,MotorType.kBrushless);
+
+    CANSparkMax SteeringMotor;
 
     public static class SteeringMotor extends WPI_TalonFX {
         public Constants.Gains kGAINS;
@@ -236,4 +239,4 @@ public class SwerveMap {
 
     }
 
-}
+}}
