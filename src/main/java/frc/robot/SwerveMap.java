@@ -20,6 +20,8 @@ public class SwerveMap {
     public static TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
     public static SimpleMotorFeedforward driveMotorFeedforward = new SimpleMotorFeedforward(Constants.kS, Constants.kV,
             Constants.kA);
+
+    // Create new variables for each swerve module.
     public static final SwerveModule FrontRightSwerveModule = new SwerveModule(
             new DriveMotor(Constants.FRDriveID, Constants.FRInvertType, Constants.FRDriveGains),
             new SteeringMotor(Constants.FRSteerID, Constants.FRSteerGains),
@@ -37,6 +39,7 @@ public class SwerveMap {
             new SteeringMotor(Constants.BLSteerID, Constants.BLSteerGains),
             new SteeringSensor(Constants.BLSensorID, Constants.BLSensorOffset));
 
+    // Gets rotation angle the robot.
     public static Rotation2d getRobotAngle() {
         return GYRO.getRotation2d();
         // return new Rotation2d(-Math.toRadians(GYRO.getAngle()));
