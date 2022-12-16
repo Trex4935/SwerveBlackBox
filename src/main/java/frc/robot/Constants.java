@@ -50,10 +50,10 @@ public class Constants {
     // Give a positive input on the joystick or phoenix tuner
     // Switch this if it goes opposite the desired direction
     // Because of the gearing the convention could be reversed (GUESS AND CHECK)
-    public static TalonFXInvertType FRInvertType = TalonFXInvertType.Clockwise;
-    public static TalonFXInvertType FLInvertType = TalonFXInvertType.CounterClockwise;
-    public static TalonFXInvertType BRInvertType = TalonFXInvertType.Clockwise;
-    public static TalonFXInvertType BLInvertType = TalonFXInvertType.CounterClockwise;
+    public static Boolean FRInvertType = true;
+    public static Boolean FLInvertType = false;
+    public static Boolean BRInvertType = true;
+    public static Boolean BLInvertType = false;
 
     // Swerve Steering PIDs (kP, kI, kD)
     public static Gains FRSteerGains = new Gains(25, 0, 0);
@@ -78,6 +78,8 @@ public class Constants {
 
     // Constants for conversion maths (RARELY THESE SHOULD BE CHANGED)
     public static final double SECONDSper100MS = .1;
+    public static final double TICKSperNEO550_Rotation = 42;
+    public static final double TICKSperNEO550_DEGREE = TICKSperNEO550_Rotation * STEERING_MOTOR_GEARING / 360;
     public static final double STEERING_SENSOR_TICKSperROTATION = 4096;
     public static final double STEERING_SENSOR_DEGREESperTICKS = 360 / STEERING_SENSOR_TICKSperROTATION;
     public static final double TICKSperTALONFX_Rotation = 2048;
