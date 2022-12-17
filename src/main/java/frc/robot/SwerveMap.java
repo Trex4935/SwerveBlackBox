@@ -10,6 +10,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -61,11 +62,13 @@ public class SwerveMap {
     // NEO that works off of SparkMax
     public static class SteeringMotor extends CANSparkMax {
         public Constants.Gains kGAINS;
+        public SparkMaxPIDController kPIDCONTROLLER;
 
         // Create an overload for the SteeringMotor
         public SteeringMotor(int _talonID, MotorType _type, Constants.Gains _gains) {
             super(_talonID, _type);
             kGAINS = _gains;
+            kPIDCONTROLLER = getPIDController();
         }
     }
 
@@ -84,14 +87,20 @@ public class SwerveMap {
         }
     }
 
-    public static class SteeringSensor extends CANCoder {
-        public double kOffsetDegrees;
+    public static class SteeringSensor extends MotorFeedbackSensor {
 
-        public SteeringSensor(int _sensorID, double _offsetDegrees) {
-            super(_sensorID);
-            kOffsetDegrees = _offsetDegrees;
-        }
     }
+
+    /*
+     * public static class SteeringSensor extends CANCoder {
+     * public double kOffsetDegrees;
+     * 
+     * public SteeringSensor(int _sensorID, double _offsetDegrees) {
+     * super(_sensorID);
+     * kOffsetDegrees = _offsetDegrees;
+     * }
+     * }
+     */
 
     /**
      * Helpful hints:
@@ -154,13 +163,13 @@ public class SwerveMap {
             // Constants.kDefaultTimeout);
             mSteeringMotor.getEncoder().setPosition(0);
 
-            mSteeringMotor.configRemoteFeedbackFilter(mSteeringSensor, 0);
+            mSteeringMotor.kPIDCONTROLLER.setFeedbackDevice(mSteeringSensor);
             mSteeringMotor.configSelectedFeedbackCoefficient(Constants.STEERING_SENSOR_DEGREESperTICKS, 1,
                     Constants.kDefaultTimeout);
 
             // Need to figure out if there is something equal to this in SparkMax
             // There doesn't appear to be ... but this is probably not 100% needed
-            // mSteeringMotor.getPIDController().setSmartMotionAllowedClosedLoopError(allowedErr,
+            // mSteeringMotor.kPIDCONTROLLER.setSmartMotionAllowedClosedLoopError(allowedErr,
             // slotID)
             // mSteeringMotor.configAllowableClosedloopError(Constants.kDefaultPIDSlotID,
             // Constants.kDefaultClosedLoopError, Constants.kDefaultTimeout);
@@ -175,10 +184,10 @@ public class SwerveMap {
             // mSteeringMotor.kGAINS.kD, Constants.kDefaultTimeout);
 
             // Configure the PID for the NEO550
-            mSteeringMotor.getPIDController().setFF(mSteeringMotor.kGAINS.kF, Constants.kDefaultPIDSlotID);
-            mSteeringMotor.getPIDController().setP(mSteeringMotor.kGAINS.kP, Constants.kDefaultPIDSlotID);
-            mSteeringMotor.getPIDController().setI(mSteeringMotor.kGAINS.kI, Constants.kDefaultPIDSlotID);
-            mSteeringMotor.getPIDController().setD(mSteeringMotor.kGAINS.kD, Constants.kDefaultPIDSlotID);
+            mSteeringMotor.kPIDCONTROLLER.setFF(mSteeringMotor.kGAINS.kF, Constants.kDefaultPIDSlotID);
+            mSteeringMotor.kPIDCONTROLLER.setP(mSteeringMotor.kGAINS.kP, Constants.kDefaultPIDSlotID);
+            mSteeringMotor.kPIDCONTROLLER.setI(mSteeringMotor.kGAINS.kI, Constants.kDefaultPIDSlotID);
+            mSteeringMotor.kPIDCONTROLLER.setD(mSteeringMotor.kGAINS.kD, Constants.kDefaultPIDSlotID);
 
             zeroSwerveAngle();
         }
@@ -272,7 +281,7 @@ public class SwerveMap {
                 newAngleDemand += 360;
             }
 
-            mSteeringMotor.set(ControlMode.Position, newAngleDemand);
+            mSteeringMotor.kPIDCONTROLLER.setReference(newAngleDemand, CANSparkMax.ControlType.kPosition);
         }
 
         public double getSteeringAngle() {
