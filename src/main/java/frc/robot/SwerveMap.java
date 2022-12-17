@@ -27,20 +27,20 @@ public class SwerveMap {
     // Create new variables for each swerve module.
     public static final SwerveModule FrontRightSwerveModule = new SwerveModule(
             new DriveMotor(Constants.FRDriveID, Constants.FRInvertType, Constants.FRDriveGains),
-            new SteeringMotor(Constants.FRSteerID, MotorType.kBrushless, Constants.FRSteerGains),
-            new SteeringSensor(Constants.FRSensorID, Constants.FRSensorOffset));
+            new SteeringMotor(Constants.FRSteerID, MotorType.kBrushless, Constants.FRSteerGains));
+            //new SteeringSensor(Constants.FRSensorID, Constants.FRSensorOffset));
     public static final SwerveModule FrontLeftSwerveModule = new SwerveModule(
             new DriveMotor(Constants.FLDriveID, Constants.FLInvertType, Constants.FLDriveGains),
-            new SteeringMotor(Constants.FLSteerID, MotorType.kBrushless, Constants.FLSteerGains),
-            new SteeringSensor(Constants.FLSensorID, Constants.FLSensorOffset));
+            new SteeringMotor(Constants.FLSteerID, MotorType.kBrushless, Constants.FLSteerGains));
+            //new SteeringSensor(Constants.FLSensorID, Constants.FLSensorOffset));
     public static final SwerveModule BackRightSwerveModule = new SwerveModule(
             new DriveMotor(Constants.BRDriveID, Constants.BRInvertType, Constants.BRDriveGains),
-            new SteeringMotor(Constants.BRSteerID, MotorType.kBrushless, Constants.BRSteerGains),
-            new SteeringSensor(Constants.BRSensorID, Constants.BRSensorOffset));
+            new SteeringMotor(Constants.BRSteerID, MotorType.kBrushless, Constants.BRSteerGains));
+            //new SteeringSensor(Constants.BRSensorID, Constants.BRSensorOffset));
     public static final SwerveModule BackLeftSwerveModule = new SwerveModule(
             new DriveMotor(Constants.BLDriveID, Constants.BLInvertType, Constants.BLDriveGains),
-            new SteeringMotor(Constants.BLSteerID, MotorType.kBrushless, Constants.BLSteerGains),
-            new SteeringSensor(Constants.BLSensorID, Constants.BLSensorOffset));
+            new SteeringMotor(Constants.BLSteerID, MotorType.kBrushless, Constants.BLSteerGains));
+            //new SteeringSensor(Constants.BLSensorID, Constants.BLSensorOffset));
 
     // Gets rotation angle the robot.
     public static Rotation2d getRobotAngle() {
@@ -87,9 +87,9 @@ public class SwerveMap {
         }
     }
 
-    public static class SteeringSensor extends MotorFeedbackSensor {
+    
 
-    }
+    
 
     /*
      * public static class SteeringSensor extends CANCoder {
@@ -116,12 +116,11 @@ public class SwerveMap {
      */
     public static class SwerveModule {
         public final SteeringMotor mSteeringMotor;
-        public final SteeringSensor mSteeringSensor;
+       // public final SteeringSensor mSteeringSensor;
         public final DriveMotor mDriveMotor;
 
-        public SwerveModule(DriveMotor _DriveMotor, SteeringMotor _SteeringMotor, SteeringSensor _SteeringSensor) {
+        public SwerveModule(DriveMotor _DriveMotor, SteeringMotor _SteeringMotor) {
             mSteeringMotor = _SteeringMotor;
-            mSteeringSensor = _SteeringSensor;
             mDriveMotor = _DriveMotor;
 
         }
@@ -141,10 +140,10 @@ public class SwerveMap {
             mDriveMotor.config_IntegralZone(0, mDriveMotor.kGAINS.kIzone);
 
             // Setup the Steering Sensor
-            mSteeringSensor.configSensorDirection(false);
+           /*  mSteeringSensor.configSensorDirection(false);
             mSteeringSensor.configMagnetOffset(mSteeringSensor.kOffsetDegrees);
             mSteeringSensor.setPositionToAbsolute();
-
+ */
             // Setup the the closed-loop PID for the steering module loop
             // mSteeringMotor.configFactoryDefault();
             mSteeringMotor.restoreFactoryDefaults();
@@ -163,9 +162,9 @@ public class SwerveMap {
             // Constants.kDefaultTimeout);
             mSteeringMotor.getEncoder().setPosition(0);
 
-            mSteeringMotor.kPIDCONTROLLER.setFeedbackDevice(mSteeringSensor);
+            /* mSteeringMotor.kPIDCONTROLLER.setFeedbackDevice(mSteeringSensor);
             mSteeringMotor.configSelectedFeedbackCoefficient(Constants.STEERING_SENSOR_DEGREESperTICKS, 1,
-                    Constants.kDefaultTimeout);
+                    Constants.kDefaultTimeout); */
 
             // Need to figure out if there is something equal to this in SparkMax
             // There doesn't appear to be ... but this is probably not 100% needed
@@ -284,9 +283,9 @@ public class SwerveMap {
             mSteeringMotor.kPIDCONTROLLER.setReference(newAngleDemand, CANSparkMax.ControlType.kPosition);
         }
 
-        public double getSteeringAngle() {
+       /*  public double getSteeringAngle() {
             return mSteeringSensor.getAbsolutePosition();
-        }
+        } */
 
         public static SwerveModuleState optimize(
                 SwerveModuleState desiredState, Rotation2d currentAngle) {
